@@ -2,6 +2,7 @@
 
 
 use App\Http\Controllers\ChristmasController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UtilController;
@@ -16,7 +17,7 @@ Route::get('/hello/{message}', function ($message) {
 
 
 //rota de homepage
-Route::get('/homepage', [UtilController::class, 'loadHomepage'])->name('home');
+Route::get('/home', [UtilController::class, 'loadHomepage'])->name('home');
 // ***************************************************************************************************************
 
 //rota que mostra all users
@@ -29,7 +30,8 @@ Route::get('/adduser', [UserController::class, 'addUsers'])->name('users.add');
 Route::get('/delete-users/{id}', [UserController::class, 'deleteUsers'])->name('users.delete');
 
 //rota de editar users
-Route::get('/edit-users/{id}', [UserController::class, 'editUsers'])->name('users.edit');
+
+Route::get('/edit-users/{id}', [UserController::class, 'editUsers'])->name('users.edit')->middleware('auth');
 
 //rota de store users
 Route::post('/store-user',[UserController::class, 'storeUser'])->name('users.store');
@@ -73,6 +75,12 @@ Route::post('/store-chgift',[ChristmasController::class, 'storegifts'])->name('g
 
 //rota de put users
 Route::put('/update-chgift',[ChristmasController::class, 'updategifts'])->name('gifts.update');
+
+// ***************************************************************************************************************
+
+//rota home dashboard
+Route::get('/dashboard',[DashboardController::class, 'dashboard'])->name('dashboard.all')->middleware('auth');
+
 
 // ***************************************************************************************************************
 //rota fallback

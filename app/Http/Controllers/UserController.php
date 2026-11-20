@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
@@ -14,8 +15,14 @@ class UserController extends Controller
     public function allUsers (){
         $usersWDB = $this->loadUsersWDB();
 
-        $usersFromDB = User::select('id','name', 'address', 'email', 'nif' )
-        ->get();
+        $searchPar = request()->query('search')? request()->query('search'):null;
+
+        $query = User::select('id','name', 'address', 'email', 'nif', 'photo' );
+        if($searchPar){
+            $query->where('name', 'LIKE' ,"%{$searchPar}%");
+        }
+
+        $usersFromDB=$query->get();
 
         // dd($usersFromDB);
         return view('users.allusers', compact('usersWDB','usersFromDB'));
@@ -57,7 +64,7 @@ class UserController extends Controller
 
     public function editUsers($id){
 
-        $userInfo = User::where('id',$id)->select('name','email','id','address','nif')->first();
+        $userInfo = User::where('id',$id)->select('name','email','id','address','nif', 'photo')->first();
 
 
         return view('users.edituser', compact('userInfo'));
@@ -67,16 +74,24 @@ class UserController extends Controller
     public function updateUser(Request $request){
 
         $request->validate([
-            'name' => 'required|max:50'
+            'name' => 'required|max:50',
+            'photo' => 'image'
         ]);
+
+        if($request->hasfile('photo')){
+            //armazenar no storage e guarda o caminho
+            $photo = Storage::putFile('userPhotos',$request->photo);
+        }
+
 
         User::where('id', $request->id)->update([
             'name'=> $request->name,
             'address'=> $request->address,
-            'nif'=> $request->nif
+            'nif'=> $request->nif,
+            'photo' =>isset($photo) ? $photo : null
         ]);
 
-        return redirect()->route('gifts.all')->with('message','User actualizado com sucesso!');
+        return redirect()->route('users.all')->with('message','User actualizado com sucesso!');
     }
 
 

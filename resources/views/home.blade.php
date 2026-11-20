@@ -11,6 +11,10 @@
     <h5>Olá {{ isset($courseName) ? $courseName : 'user' }}</h5>
     <h6>O contacto é o {{ $contactInfo['name'] }} - {{ $contactInfo['contact'] }}</h6>
 
+    @auth
+        <h5>Olá {{Auth::user()->name}}</h5>
+    @endauth
+
     <h5>Informação CESAE</h5>
     <ul>
         <li>{{ $istec_info['name'] }}</li>

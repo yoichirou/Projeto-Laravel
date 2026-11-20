@@ -35,8 +35,11 @@
                         <td class="text-center">{{ $item->predicted_value }}</td>
                         <td class="text-center">{{ $item->username }}</td>
                         <td class="text-center">{{ $item->actual_value }}</td>
-                        <td class="{{ $item->predicted_value - $item->actual_value >= 0 ? 'bg-success' : 'bg-danger' }}">
-                            {{ $item->predicted_value - $item->actual_value }}</td>
+                        <td class="text-center align-middle">
+                            <span class="{{ $item->predicted_value - $item->actual_value >= 0 ? 'bg-success-subtle text-success' : 'bg-danger-subtle text-danger' }} badge rounded-pill fs-6">
+                                {{ $item->predicted_value - $item->actual_value }}
+                            </span>
+                        </td>
                         <td class="text-center"><a href="{{ route('gifts.delete', $item->id) }}" class="btn btn-danger">Apagar</a></td>
                         <td class="text-center"><a href="{{ route('gifts.edit', $item->id) }}" class="btn btn-primary">Editar</a></td>
                     </tr>

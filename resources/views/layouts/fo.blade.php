@@ -11,7 +11,7 @@
         integrity="sha384-yEPZ7jP9S0QKiUQ0m3jjsO4ProIW7wvR9gXkI7JOGa2XVsw53Yke2bsdkBbjmmiX" crossorigin="anonymous">
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.9/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-WyOxWvTyr1QaMPfiPJSv76iReVthorl5uWlFtZPyK0IEB0hGzo9y5Bp9mYanr8Bu" crossorigin="anonymous" defer>
+        integrity="sha384-WyOxWvTyr1QaMPfiPJSv76iReVthorl5uWlFtZPyK0IEB0hGzo9y5Bp9mYanr8Bu" crossorigin="anonymous" defer>
     </script>
     {{-- CSS Próprio --}}
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
@@ -30,7 +30,7 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="{{route('home')}}">Home</a>
+                        <a class="nav-link active" aria-current="page" href="{{ route('home') }}">Home</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">Link</a>
@@ -53,17 +53,41 @@
                         <a class="nav-link disabled" aria-disabled="true">Disabled</a>
                     </li>
                 </ul>
-                <form class="d-flex" role="search">
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
-                    <button class="btn btn-outline-success" type="submit">Search</button>
-                </form>
+                @if (Route::has('login'))
+                    <nav class="flex items-center justify-end gap-4">
+                        @auth
+                        <div class="d-flex align-items-center gap-2">
+                            <a href="{{ route('dashboard.all') }}"
+                                class="btn btn-info">
+                                Dashboard
+                            </a>
+                            <form action="{{route('logout')}}" method="POST">
+                                @csrf
+                                <button class="btn btn-info ">Logout</button>
+                            </form>
+                        </div>
+                        @else
+                            <a href="{{ route('login') }}"
+                                class="btn btn-info">
+                                Log in
+                            </a>
+
+                            @if (Route::has('users.add'))
+                                <a href="{{ route('users.add') }}"
+                                    class="btn btn-info">
+                                    Register
+                                </a>
+                            @endif
+                        @endauth
+                    </nav>
+                @endif
             </div>
         </div>
     </nav>
 
     <div class="container">
 
-    @yield('content')
+        @yield('content')
 
     </div>
 
